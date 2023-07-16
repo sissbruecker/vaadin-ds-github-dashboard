@@ -7116,7 +7116,8 @@ ${gm}
             `)}
         ></vaadin-grid-column>
       </vaadin-grid>
-    `}handleToggleTheme(){const t=this.settings.theme==="dark"?"light":"dark";this.settings={...this.settings,theme:t},sr.saveSettings(this.settings)}handleRangeStartChange(t){this.rangeStart=Sc(t.target.value,"yyyy-MM-dd",new Date),this.refreshDashboard()}async refreshData(){this.loading=!0,this.loadingProgress="",this.dashboard=null,this.githubData=await wm(this.dataStart,t=>{this.loadingProgress=t}),sr.saveGithubData(this.githubData),this.refreshDashboard(),this.loading=!1}refreshDashboard(){this.dashboard=xm(this.githubData,this.rangeStart)}}Rr(Ni,"styles",[ym,g`
+    `}handleToggleTheme(){const t=this.settings.theme==="dark"?"light":"dark";this.settings={...this.settings,theme:t},sr.saveSettings(this.settings)}handleRangeStartChange(t){this.rangeStart=Sc(t.target.value,"yyyy-MM-dd",new Date),this.refreshDashboard()}async refreshData(){this.loading=!0,this.loadingProgress="",this.dashboard=null,this.githubData=await wm(this.dataStart,t=>{this.loadingProgress+=t+`
+`}),sr.saveGithubData(this.githubData),this.refreshDashboard(),this.loading=!1}refreshDashboard(){this.dashboard=xm(this.githubData,this.rangeStart)}}Rr(Ni,"styles",[ym,g`
       :host {
         display: block;
         min-height: 100vh;
@@ -7216,6 +7217,7 @@ ${gm}
       .panel.loading .progress {
         padding-left: calc(var(--lumo-space-s) + 20px);
         color: var(--lumo-secondary-text-color);
+        white-space: pre;
       }
 
       .panel.loading .spinner {
