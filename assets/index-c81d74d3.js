@@ -5002,7 +5002,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
         <path d="M12 3a9 9 0 1 0 9 9"></path>
       </svg>
-    `}};async function im(s,t,e){async function r(n){let a=[];return e&&e(`Loading recently merged pulls: repo=${s}, page=${n}`),await fetch(`https://api.github.com/repos/${s}/pulls?sort=updated&direction=desc&state=closed&per_page=100&page=${n}`).then(l=>l.json()).then(l=>{l.forEach(d=>{new Date(d.merged_at)>=t&&a.push(nm(d))})}),a}let i=1,o=[];for(;;){const n=await r(i);if(n.length===0)break;o=o.concat(n),i++}return o}async function sm(s,t,e,r){async function i(a){let l=[];return r&&r(`Loading recently closed issues: repo=${s}, labels=${e}, page=${a}`),await fetch(`https://api.github.com/repos/${s}/issues?sort=updated&direction=desc&state=closed&labels=${e}&per_page=100&page=${a}`).then(d=>d.json()).then(d=>{d.forEach(c=>{new Date(c.closed_at)>=t&&l.push(Ja(c))})}),l}let o=1,n=[];for(;;){const a=await i(o);if(a.length===0)break;n=n.concat(a),o++}return n}async function om(s,t,e){async function r(n){let a=[];return e&&e(`Loading open issues: repo=${s}, labels=${t}, page=${n}`),await fetch(`https://api.github.com/repos/${s}/issues?sort=updated&direction=desc&state=open&labels=${t}&per_page=100&page=${n}`).then(l=>l.json()).then(l=>{l.forEach(d=>{a.push(Ja(d))})}),a}let i=1,o=[];for(;;){const n=await r(i);if(n.length===0)break;o=o.concat(n),i++}return o}function nm(s){return{number:s.number,title:s.title,url:s.html_url,author:s.user.login,mergedAt:s.merged_at}}function Ja(s){return{number:s.number,title:s.title,url:s.html_url,closedAt:s.closed_at}}const si={loadRecentlyMergedPulls:im,loadRecentlyClosedIssues:sm,loadOpenIssues:om};class am{saveGithubData(t){t.hash=Qo();const e=JSON.stringify(t);localStorage.setItem("vdg-github-data",e)}loadGithubData(){const t=localStorage.getItem("vdg-github-data");if(t){const e=JSON.parse(t);if(e.hash===Qo())return e}return null}saveSettings(t){const e=JSON.stringify(t);localStorage.setItem("vdg-settings",e)}loadSettings(){const t=localStorage.getItem("vdg-settings");return t?JSON.parse(t):{theme:"light"}}}function Qo(){return li().getTime()}const sr=new am;/**
+    `}};async function im(s,t,e){async function r(n){let a=[];return e&&e(`Loading recently merged pulls: repo=${s}, page=${n}`),await fetch(`https://api.github.com/repos/${s}/pulls?sort=updated&direction=desc&state=closed&per_page=100&page=${n}`).then(l=>l.json()).then(l=>{l.forEach(d=>{new Date(d.merged_at)>=t&&a.push(nm(d))})}),a}let i=1,o=[];for(;;){const n=await r(i);if(n.length===0)break;o=o.concat(n),i++}return o}async function sm(s,t,e,r){async function i(a){let l=[];return r&&r(`Loading recently closed issues: repo=${s}, labels=${e}, page=${a}`),await fetch(`https://api.github.com/repos/${s}/issues?sort=updated&direction=desc&state=closed&labels=${e}&per_page=100&page=${a}`).then(d=>d.json()).then(d=>{d.forEach(c=>{new Date(c.closed_at)>=t&&l.push(Ja(s,c))})}),l}let o=1,n=[];for(;;){const a=await i(o);if(a.length===0)break;n=n.concat(a),o++}return n}async function om(s,t,e){async function r(n){let a=[];return e&&e(`Loading open issues: repo=${s}, labels=${t}, page=${n}`),await fetch(`https://api.github.com/repos/${s}/issues?sort=updated&direction=desc&state=open&labels=${t}&per_page=100&page=${n}`).then(l=>l.json()).then(l=>{l.forEach(d=>{a.push(Ja(s,d))})}),a}let i=1,o=[];for(;;){const n=await r(i);if(n.length===0)break;o=o.concat(n),i++}return o}function nm(s){return{number:s.number,title:s.title,url:s.html_url,author:s.user.login,repo:s.head.repo.name,mergedAt:s.merged_at}}function Ja(s,t){return{number:t.number,title:t.title,url:t.html_url,repo:s.split("/")[1],closedAt:t.closed_at}}const si={loadRecentlyMergedPulls:im,loadRecentlyClosedIssues:sm,loadOpenIssues:om};class am{saveGithubData(t){t.hash=Qo();const e=JSON.stringify(t);localStorage.setItem("vdg-github-data",e)}loadGithubData(){const t=localStorage.getItem("vdg-github-data");if(t){const e=JSON.parse(t);if(e.hash===Qo())return e}return null}saveSettings(t){const e=JSON.stringify(t);localStorage.setItem("vdg-settings",e)}loadSettings(){const t=localStorage.getItem("vdg-settings");return t?JSON.parse(t):{theme:"light"}}}function Qo(){return li().getTime()}const sr=new am;/**
  * @license
  * Copyright (c) 2017 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
@@ -7098,14 +7098,15 @@ ${gm}
       </div>
     `}renderGrid(t,e=!1){return Q`
       <vaadin-grid .items="${t}" theme="no-border">
-        <vaadin-grid-column path="title"></vaadin-grid-column>
-        ${e?Q` <vaadin-grid-column
-              width="200px"
-              flex-grow="0"
-              ${Yo(r=>Q`<span style="color: var(--lumo-secondary-text-color)"
-                    >@${r.author}</span
-                  >`)}
-            ></vaadin-grid-column>`:null}
+        <vaadin-grid-column
+          ${Yo(r=>Q`
+              <div class="title">${r.title}</div>
+              <div class="details">
+                <span>${r.repo}</span>
+                ${r.author?Q`<span>@${r.author}</span>`:null}
+              </div>
+            `)}
+        ></vaadin-grid-column>
         <vaadin-grid-column
           width="60px"
           flex-grow="0"
@@ -7281,7 +7282,7 @@ ${gm}
 
       .panel.issues vaadin-grid {
         --lumo-base-color: transparent;
-        height: 300px;
+        height: 400px;
       }
 
       .panel.issues vaadin-grid::part(header-cell) {
@@ -7291,4 +7292,25 @@ ${gm}
       .panel.issues vaadin-grid::part(body-cell first-column-cell) {
         padding-left: var(--lumo-space-s);
       }
-    `]),Rr(Ni,"properties",{loading:{type:Boolean},loadingProgress:{type:String},dataStart:{type:Date},rangeStart:{type:Date},githubData:{type:Object},dashboard:{type:Object},settings:{type:Object}});customElements.define("vgd-dashboard",Ni);async function wm(s,t){const e=["vaadin/web-components","vaadin/flow-components"];let r=[],i=[],o=[];for(const a of e)r=r.concat(await si.loadRecentlyMergedPulls(a,s,t)),i=i.concat(await si.loadRecentlyClosedIssues(a,s,"BFP",t)),o=o.concat(await si.loadOpenIssues(a,"BFP",t));return{startDate:nr(s,"yyyy-MM-dd"),pulls:r,closedWarrantyIssues:i,openWarrantyIssues:o}}function xm(s,t){const e=["DiegoCardoso","sissbruecker","tomivirkki","rolfsmeds","vursen","web-padawan","yuriy-fix","ugur-vaadin","vaadin-bot","dependabot[bot]"],r=[],i=[],o=[],n=[],a=[],l=[];s.pulls.forEach(h=>{const u=h.title.includes("CP:"),p=new Date(h.mergedAt)>=t;u||!p||(r.push(h),h.title.startsWith("feat")&&i.push(h),h.title.startsWith("fix")&&o.push(h),h.title.startsWith("refactor")&&n.push(h),(h.title.startsWith("chore")||h.title.startsWith("test")||h.title.startsWith("docs"))&&a.push(h),e.includes(h.author)||l.push(h))});const d=s.openWarrantyIssues,c=s.closedWarrantyIssues.filter(h=>new Date(h.closedAt)>=t);return{githubData:s,pulls:r,features:i,fixes:o,refactors:n,chores:a,contributions:l,openWarrantyIssues:d,closedWarrantyIssues:c}}Hi(Q` <vgd-dashboard></vgd-dashboard>`,document.getElementById("app"));
+
+      .panel.issues vaadin-grid .title {
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .panel.issues vaadin-grid .details {
+        display: flex;
+        margin-top: var(--lumo-space-xs);
+        font-size: var(--lumo-font-size-s);
+        color: var(--lumo-secondary-text-color);
+      }
+
+      .panel.issues vaadin-grid .details > *:not(:last-child) {
+        margin-right: var(--lumo-space-xs);
+      }
+
+      .panel.issues vaadin-grid .details > *:not(:last-child)::after {
+        content: "·";
+        margin-left: var(--lumo-space-xs);
+      }
+    `]),Rr(Ni,"properties",{loading:{type:Boolean},loadingProgress:{type:String},dataStart:{type:Date},rangeStart:{type:Date},githubData:{type:Object},dashboard:{type:Object},settings:{type:Object}});customElements.define("vgd-dashboard",Ni);async function wm(s,t){const e=["vaadin/web-components","vaadin/flow-components","vaadin/react-components"],r=(await Promise.all(e.map(a=>si.loadRecentlyMergedPulls(a,s,t)))).flat(),i=(await Promise.all(e.map(a=>si.loadRecentlyClosedIssues(a,s,"BFP",t)))).flat(),o=(await Promise.all(e.map(a=>si.loadOpenIssues(a,"BFP",t)))).flat();return{startDate:nr(s,"yyyy-MM-dd"),pulls:r,closedWarrantyIssues:i,openWarrantyIssues:o}}function xm(s,t){const e=["DiegoCardoso","sissbruecker","tomivirkki","rolfsmeds","vursen","web-padawan","yuriy-fix","ugur-vaadin","vaadin-bot","dependabot[bot]"],r=[],i=[],o=[],n=[],a=[],l=[];s.pulls.forEach(h=>{const u=h.title.includes("CP:"),p=new Date(h.mergedAt)>=t;u||!p||(r.push(h),h.title.startsWith("feat")&&i.push(h),h.title.startsWith("fix")&&o.push(h),h.title.startsWith("refactor")&&n.push(h),(h.title.startsWith("chore")||h.title.startsWith("test")||h.title.startsWith("docs"))&&a.push(h),e.includes(h.author)||l.push(h))});const d=s.openWarrantyIssues,c=s.closedWarrantyIssues.filter(h=>new Date(h.closedAt)>=t);return{githubData:s,pulls:r,features:i,fixes:o,refactors:n,chores:a,contributions:l,openWarrantyIssues:d,closedWarrantyIssues:c}}Hi(Q` <vgd-dashboard></vgd-dashboard>`,document.getElementById("app"));
