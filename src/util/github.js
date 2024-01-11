@@ -58,7 +58,7 @@ async function loadRecentlyClosedIssues(
         data.forEach((issue) => {
           const closedAt = new Date(issue.closed_at);
           if (closedAt >= startDate) {
-            pageIssues.push(convertIssue(issue));
+            pageIssues.push(convertIssue(repo, issue));
           }
         });
       });
@@ -95,7 +95,7 @@ async function loadOpenIssues(repo, labels, progressCallback) {
       .then((response) => response.json())
       .then((data) => {
         data.forEach((issue) => {
-          pageIssues.push(convertIssue(issue));
+          pageIssues.push(convertIssue(repo, issue));
         });
       });
     return pageIssues;
@@ -123,15 +123,17 @@ function convertPull(pull) {
     title: pull.title,
     url: pull.html_url,
     author: pull.user.login,
+    repo: pull.head.repo.name,
     mergedAt: pull.merged_at,
   };
 }
 
-function convertIssue(issue) {
+function convertIssue(repo, issue) {
   return {
     number: issue.number,
     title: issue.title,
     url: issue.html_url,
+    repo: repo.split("/")[1],
     closedAt: issue.closed_at,
   };
 }

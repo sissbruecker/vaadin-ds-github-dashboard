@@ -182,7 +182,7 @@ export class Dashboard extends LitElement {
 
       .panel.issues vaadin-grid {
         --lumo-base-color: transparent;
-        height: 300px;
+        height: 400px;
       }
 
       .panel.issues vaadin-grid::part(header-cell) {
@@ -191,6 +191,27 @@ export class Dashboard extends LitElement {
 
       .panel.issues vaadin-grid::part(body-cell first-column-cell) {
         padding-left: var(--lumo-space-s);
+      }
+
+      .panel.issues vaadin-grid .title {
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .panel.issues vaadin-grid .details {
+        display: flex;
+        margin-top: var(--lumo-space-xs);
+        font-size: var(--lumo-font-size-s);
+        color: var(--lumo-secondary-text-color);
+      }
+
+      .panel.issues vaadin-grid .details > *:not(:last-child) {
+        margin-right: var(--lumo-space-xs);
+      }
+
+      .panel.issues vaadin-grid .details > *:not(:last-child)::after {
+        content: "·";
+        margin-left: var(--lumo-space-xs);
       }
     `,
   ];
@@ -384,19 +405,17 @@ export class Dashboard extends LitElement {
   renderGrid(issues, showAuthor = false) {
     return html`
       <vaadin-grid .items="${issues}" theme="no-border">
-        <vaadin-grid-column path="title"></vaadin-grid-column>
-        ${showAuthor
-          ? html` <vaadin-grid-column
-              width="200px"
-              flex-grow="0"
-              ${columnBodyRenderer(
-                (issue) =>
-                  html`<span style="color: var(--lumo-secondary-text-color)"
-                    >@${issue.author}</span
-                  >`,
-              )}
-            ></vaadin-grid-column>`
-          : null}
+        <vaadin-grid-column
+          ${columnBodyRenderer(
+            (issue) => html`
+              <div class="title">${issue.title}</div>
+              <div class="details">
+                <span>${issue.repo}</span>
+                ${issue.author ? html`<span>@${issue.author}</span>` : null}
+              </div>
+            `,
+          )}
+        ></vaadin-grid-column>
         <vaadin-grid-column
           width="60px"
           flex-grow="0"
