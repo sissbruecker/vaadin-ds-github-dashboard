@@ -444,27 +444,38 @@ customElements.define("vgd-dashboard", Dashboard);
 
 async function refreshGithubData(startDate, progressCallback) {
   // TODO: Extract to config
-  const repos = ["vaadin/web-components", "vaadin/flow-components"];
+  const repos = [
+    "vaadin/web-components",
+    "vaadin/flow-components",
+    "vaadin/react-components",
+  ];
 
-  let pulls = [];
-  let closedWarrantyIssues = [];
-  let openWarrantyIssues = [];
-  for (const repo of repos) {
-    pulls = pulls.concat(
-      await github.loadRecentlyMergedPulls(repo, startDate, progressCallback),
-    );
-    closedWarrantyIssues = closedWarrantyIssues.concat(
-      await github.loadRecentlyClosedIssues(
-        repo,
-        startDate,
-        "BFP",
-        progressCallback,
+  const pulls = (
+    await Promise.all(
+      repos.map((repo) =>
+        github.loadRecentlyMergedPulls(repo, startDate, progressCallback),
       ),
-    );
-    openWarrantyIssues = openWarrantyIssues.concat(
-      await github.loadOpenIssues(repo, "BFP", progressCallback),
-    );
-  }
+    )
+  ).flat();
+
+  const closedWarrantyIssues = (
+    await Promise.all(
+      repos.map((repo) =>
+        github.loadRecentlyClosedIssues(
+          repo,
+          startDate,
+          "BFP",
+          progressCallback,
+        ),
+      ),
+    )
+  ).flat();
+
+  const openWarrantyIssues = (
+    await Promise.all(
+      repos.map((repo) => github.loadOpenIssues(repo, "BFP", progressCallback)),
+    )
+  ).flat();
 
   const githubData = {
     startDate: dateFnsFormat(startDate, "yyyy-MM-dd"),
