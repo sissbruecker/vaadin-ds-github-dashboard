@@ -151,9 +151,8 @@ h2 {
   font-size: var(--aura-font-size-s);
 }
 
-.panel.issues vaadin-tab::before,
-.panel.issues vaadin-tab::after {
-  display: none;
+.panel.issues vaadin-tabs {
+  background: none;
 }
 
 .panel.issues vaadin-grid {
