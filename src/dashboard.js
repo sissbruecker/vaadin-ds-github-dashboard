@@ -13,205 +13,14 @@ import "@vaadin/tooltip";
 import { icons } from "./util/icons";
 import { github } from "./util/github";
 import { storage } from "./util/storage";
-import { lumoTheme } from "./util/theme";
 
 export class Dashboard extends LitElement {
   static styles = [
-    lumoTheme,
     css`
       :host {
         display: block;
         min-height: 100vh;
-        background: var(--lumo-shade-10pct);
         box-sizing: border-box;
-      }
-
-      h1 {
-        font-size: var(--lumo-font-size-xxl);
-      }
-
-      h2 {
-        font-size: var(--lumo-font-size-xl);
-      }
-
-      .dashboard {
-        --dashboard-panel-background: var(--lumo-base-color);
-        min-height: 100vh;
-      }
-
-      .dashboard[theme="dark"] {
-        --dashboard-panel-background: var(--lumo-tint-10pct);
-      }
-
-      .header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        flex-wrap: wrap;
-        padding: var(--lumo-space-s) var(--lumo-space-xl);
-        background: var(--dashboard-panel-background);
-        box-shadow: var(--lumo-box-shadow-s);
-      }
-
-      .header vaadin-date-picker {
-        padding: 0;
-      }
-
-      .header .help-icon {
-        display: inline-block;
-        color: var(--lumo-contrast-80pct);
-      }
-
-      .header svg {
-        vertical-align: bottom;
-      }
-
-      .main {
-        display: flex;
-        flex-direction: column;
-        gap: var(--lumo-space-xl);
-        padding: var(--lumo-space-xl);
-      }
-
-      .section.flex {
-        display: flex;
-        flex-wrap: wrap;
-        gap: var(--lumo-space-xl);
-      }
-
-      .section.grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
-        gap: var(--lumo-space-xl);
-      }
-
-      @media (max-width: 600px) {
-        .section.grid {
-          display: grid;
-          grid-template-columns: 1fr;
-          gap: var(--lumo-space-xl);
-        }
-      }
-
-      .panel {
-        min-width: 200px;
-        display: flex;
-        flex-direction: column;
-      }
-
-      .panel > h2 {
-        margin-bottom: var(--lumo-space-m);
-      }
-
-      .panel > .card {
-        background: var(--dashboard-panel-background);
-        box-shadow: var(--lumo-box-shadow-s);
-        border-radius: var(--lumo-border-radius-l);
-      }
-
-      .panel.loading .title {
-        display: flex;
-        align-items: center;
-        font-weight: bold;
-      }
-
-      .panel.loading .progress {
-        padding-left: calc(var(--lumo-space-s) + 20px);
-        color: var(--lumo-secondary-text-color);
-        white-space: pre;
-      }
-
-      .panel.loading .spinner {
-        display: inline-block;
-        position: relative;
-        width: 20px;
-        height: 20px;
-        margin-right: var(--lumo-space-s);
-      }
-
-      .panel.loading .spinner svg {
-        position: absolute;
-        animation: spinner 1.2s linear infinite;
-      }
-
-      @keyframes spinner {
-        0% {
-          transform: rotate(0deg);
-        }
-        100% {
-          transform: rotate(360deg);
-        }
-      }
-
-      .panel.stats .card {
-        padding: var(--lumo-space-m);
-      }
-
-      .panel.stats .title {
-        font-weight: bold;
-      }
-
-      .panel.stats .list {
-        display: flex;
-        margin-top: var(--lumo-space-m);
-        gap: var(--lumo-space-m);
-      }
-
-      .panel.stats .stat .value {
-        font-size: var(--lumo-font-size-xl);
-      }
-
-      .panel.stats .stat .label {
-        color: var(--lumo-secondary-text-color);
-        font-size: var(--lumo-font-size-s);
-      }
-
-      .panel.issues .card {
-        padding-top: var(--lumo-space-m);
-        padding-bottom: var(--lumo-space-s);
-      }
-
-      .panel.issues vaadin-tabsheet::part(content) {
-        padding: 0;
-      }
-
-      .panel.issues vaadin-tab::before,
-      .panel.issues vaadin-tab::after {
-        display: none;
-      }
-
-      .panel.issues vaadin-grid {
-        --lumo-base-color: transparent;
-        height: 400px;
-      }
-
-      .panel.issues vaadin-grid::part(header-cell) {
-        display: none;
-      }
-
-      .panel.issues vaadin-grid::part(body-cell first-column-cell) {
-        padding-left: var(--lumo-space-s);
-      }
-
-      .panel.issues vaadin-grid .title {
-        overflow: hidden;
-        text-overflow: ellipsis;
-      }
-
-      .panel.issues vaadin-grid .details {
-        display: flex;
-        margin-top: var(--lumo-space-xs);
-        font-size: var(--lumo-font-size-s);
-        color: var(--lumo-secondary-text-color);
-      }
-
-      .panel.issues vaadin-grid .details > *:not(:last-child) {
-        margin-right: var(--lumo-space-xs);
-      }
-
-      .panel.issues vaadin-grid .details > *:not(:last-child)::after {
-        content: "·";
-        margin-left: var(--lumo-space-xs);
       }
     `,
   ];
@@ -235,6 +44,10 @@ export class Dashboard extends LitElement {
     this.settings = storage.loadSettings();
   }
 
+  createRenderRoot() {
+    return this;
+  }
+
   async firstUpdated() {
     this.githubData = storage.loadGithubData();
     if (!this.githubData) {
@@ -244,31 +57,35 @@ export class Dashboard extends LitElement {
     }
   }
 
+  updated(props) {
+    if (props.has("settings")) {
+      document.documentElement.style.colorScheme =
+        this.settings.theme === "dark" ? "dark" : "light";
+    }
+  }
+
   render() {
     return html`
-      <div class="dashboard" theme="${this.settings.theme}">
-        <div class="header">
+      <div class="dashboard">
+        <div class="header aura-surface">
           <h1>Vaadin DS Github Dashboard</h1>
           <div class="actions">
-            <vaadin-button
-              theme="tertiary small"
-              @click="${this.handleToggleTheme}"
-            >
-              ${icons.moon()}
-            </vaadin-button>
             <vaadin-date-picker
               label="Show data since"
-              theme="small"
               .min="${dateFnsFormat(this.dataStart, "yyyy-MM-dd")}"
               .max="${dateFnsFormat(new Date(), "yyyy-MM-dd")}"
               .value="${dateFnsFormat(this.rangeStart, "yyyy-MM-dd")}"
               @change="${this.handleRangeStartChange}"
             ></vaadin-date-picker>
-
-            <vaadin-button theme="small" @click="${this.refreshData}"
+            <vaadin-button @click="${this.refreshData}"
               >Refresh data
             </vaadin-button>
-            <span id="help-icon" class="help-icon"> ${icons.help()} </span>
+            <vaadin-button theme="tertiary" @click="${this.handleToggleTheme}">
+              ${icons.moon()}
+            </vaadin-button>
+            <vaadin-button id="help-icon" theme="tertiary"
+              >${icons.help()}</vaadin-button
+            >
             <vaadin-tooltip
               for="help-icon"
               text="Github data is updated once per day and then cached in local storage. 'Refresh data' forces an update. Data contains pulls and issues from the last 30 days, which is the maximum time range that can be configured."
@@ -323,8 +140,8 @@ export class Dashboard extends LitElement {
                 <div class="section grid">
                   <div class="panel issues">
                     <h2>Merged PRs</h2>
-                    <div class="card">
-                      <vaadin-tabsheet>
+                    <div class="card aura-surface">
+                      <vaadin-tabsheet theme="no-border no-padding">
                         <vaadin-tabs slot="tabs">
                           <vaadin-tab id="features-tab">Features</vaadin-tab>
                           <vaadin-tab id="fixes-tab">Fixes</vaadin-tab>
@@ -355,8 +172,8 @@ export class Dashboard extends LitElement {
 
                   <div class="panel issues">
                     <h2>BFPs</h2>
-                    <div class="card">
-                      <vaadin-tabsheet>
+                    <div class="card aura-surface">
+                      <vaadin-tabsheet theme="no-border no-padding">
                         <vaadin-tabs slot="tabs">
                           <vaadin-tab id="closed-warranty-tab"
                             >Closed
@@ -385,7 +202,7 @@ export class Dashboard extends LitElement {
   renderStats(title, values) {
     return html`
       <div class="panel stats">
-        <div class="card">
+        <div class="card aura-surface">
           <div class="title">${title}</div>
           <div class="list">
             ${values.map(

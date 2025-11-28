@@ -2,7 +2,7 @@
   "name": "vaadin-ds-github-dashboard",
   "version": "1.0.0",
   "scripts": {
-    "start": "web-dev-server --node-resolve --open --watch",
+    "start": "vite",
     "build": "rm -rf dist && vite build",
     "predeploy" : "npm run build",
     "deploy" : "gh-pages -d dist"
@@ -14,12 +14,13 @@
     "vite": "^4.4.2"
   },
   "dependencies": {
-    "@vaadin/button": "^24.1.3",
-    "@vaadin/date-picker": "^24.1.3",
-    "@vaadin/grid": "^24.1.3",
-    "@vaadin/tabsheet": "^24.1.3",
-    "@vaadin/tooltip": "^24.1.3",
+    "@vaadin/aura": "^25.0.0-beta5",
+    "@vaadin/button": "^25.0.0-beta5",
+    "@vaadin/date-picker": "^25.0.0-beta5",
+    "@vaadin/grid": "^25.0.0-beta5",
+    "@vaadin/tabsheet": "^25.0.0-beta5",
+    "@vaadin/tooltip": "^25.0.0-beta5",
     "date-fns": "^2.30.0",
-    "lit": "^2.7.6"
+    "lit": "^3.3.1"
   }
 }

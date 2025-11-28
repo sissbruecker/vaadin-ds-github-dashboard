@@ -6,8 +6,8 @@ export const icons = {
       <svg
         xmlns="http://www.w3.org/2000/svg"
         class="icon icon-tabler icon-tabler-moon-2"
-        width="24"
-        height="24"
+        width="20"
+        height="20"
         viewBox="0 0 24 24"
         stroke-width="2"
         stroke="currentColor"
@@ -25,8 +25,8 @@ export const icons = {
     return html`<svg
       xmlns="http://www.w3.org/2000/svg"
       class="icon icon-tabler icon-tabler-help"
-      width="24"
-      height="24"
+      width="20"
+      height="20"
       viewBox="0 0 24 24"
       stroke-width="2"
       stroke="currentColor"
