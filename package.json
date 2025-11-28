@@ -8,10 +8,9 @@
     "deploy" : "gh-pages -d dist"
   },
   "devDependencies": {
-    "@web/dev-server": "^0.2.5",
     "gh-pages": "^5.0.0",
     "prettier": "^3.0.0",
-    "vite": "^4.4.2"
+    "vite": "^7.1.1"
   },
   "dependencies": {
     "@vaadin/aura": "^25.0.0-beta5",
