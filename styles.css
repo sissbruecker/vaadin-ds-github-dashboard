@@ -4,14 +4,6 @@ html, body {
   --aura-background-color-dark: #112133;
 }
 
-h1 {
-  font-size: var(--aura-font-size-xl);
-}
-
-h2 {
-  font-size: var(--aura-font-size-l);
-}
-
 .dashboard {
   min-height: 100vh;
 }
@@ -31,17 +23,8 @@ h2 {
   gap: var(--vaadin-gap-s);
 }
 
-.header vaadin-date-picker {
-  padding: 0;
-}
-
 .header .help-icon {
-  display: inline-block;
   color: var(--vaadin-text-color-secondary);
-}
-
-.header svg {
-  vertical-align: bottom;
 }
 
 .main {
@@ -84,13 +67,13 @@ h2 {
 .panel > .card {
   box-shadow: var(--aura-shadow-m);
   border-radius: var(--vaadin-radius-m);
+  overflow: hidden;
 }
 
 .header,
 .panel > .card {
   --aura-surface-level: 3;
   --aura-surface-opacity: 0.7;
-  overflow: hidden;
 }
 
 .panel.loading .title {
